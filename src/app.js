@@ -3,7 +3,8 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import cors from "cors";
 import dotenv from "dotenv";
-
+import { connectMongo } from "./config/db_mongo.js"; 
+connectMongo();  
 import authRoutes from "./routes/auth.routes.js";
 import usuarioRoutes from "./routes/usuario.routes.js";
 import courseRoutes from "./routes/course.routes.js";
@@ -17,6 +18,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
+
 // Sesiones con cookies
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -29,10 +36,7 @@ app.use(session({
     }
 }));
 
-
-app.use(cors());
-
-// Archivos estáticos (HTML y CSS)
+// Archivos estáticos 
 app.use(express.static("src/public"));
 
 // Rutas API

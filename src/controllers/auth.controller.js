@@ -6,9 +6,7 @@ import {
     obtenerRolesDeUsuario
 } from "../models/usuario.model.js";
 
-// ===========================================
 //  REGISTRAR UN NUEVO USUARIO
-// ===========================================
 export const registrarUsuario = async (req, res) => {
     try {
         const { nombre, correo, password } = req.body;
@@ -19,7 +17,6 @@ export const registrarUsuario = async (req, res) => {
             });
         }
 
-        // Verificar que el correo no exista
         const usuarioExistente = await obtenerUsuarioPorCorreo(correo);
         if (usuarioExistente) {
             return res.status(400).json({
@@ -52,9 +49,7 @@ export const registrarUsuario = async (req, res) => {
     }
 };
 
-// ===========================================
-//  INICIAR SESIÓN
-// ===========================================
+
 export const iniciarSesion = async (req, res) => {
     try {
         const { correo, password } = req.body;
@@ -103,9 +98,9 @@ export const iniciarSesion = async (req, res) => {
     }
 };
 
-// ===========================================
+
 //  CERRAR SESIÓN
-// ===========================================
+
 export const cerrarSesion = (req, res) => {
     try {
         req.session.destroy(() => {

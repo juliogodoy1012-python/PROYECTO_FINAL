@@ -79,3 +79,12 @@ export const asignarRol = async (req, res) => {
         });
     }
 };
+
+export const listarRoles = async (req, res) => {
+  try {
+    const [roles] = await mysql.query("SELECT * FROM roles");
+    res.json(roles);
+  } catch (error) {
+    res.status(500).json({ mensaje: "Error al obtener roles" });
+  }
+};
