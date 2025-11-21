@@ -7,12 +7,14 @@ import {
 
 import { requiereAutenticacion } from "../middlewares/auth.middleware.js";
 import { requiereRol } from "../middlewares/rol.middleware.js";
+import { validarCurso } from "../middlewares/validaciones.middleware.js";
 
 const router = Router();
 router.post(
     "/crear",
     requiereAutenticacion,
     requiereRol(["instructor"]),
+    validarCurso,
     crearCurso
 );
 
