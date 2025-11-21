@@ -5,7 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import authRoutes from "./routes/auth.routes.js";
-import userRoutes from "./routes/user.routes.js";
+import usuarioRoutes from "./routes/usuario.routes.js";
 import courseRoutes from "./routes/course.routes.js";
 
 dotenv.config();
@@ -37,7 +37,7 @@ app.use(express.static("src/public"));
 
 // Rutas API
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/users", usuarioRoutes);
 app.use("/api/courses", courseRoutes);
 
 app.listen(process.env.PORT, () =>
