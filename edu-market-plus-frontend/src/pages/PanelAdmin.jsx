@@ -1,42 +1,34 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
 axios.defaults.withCredentials = true;
 
 function PanelAdmin() {
-
   const [usuarios, setUsuarios] = useState([]);
-  const [rolSeleccionado, setRolSeleccionado] = useState("");
-
-
-  // VALIDAR ROL ADMINISTRADOR
+  const [rolesSeleccionados, setRolesSeleccionados] = useState({}); // 👈 objeto
 
   useEffect(() => {
     const usuario = JSON.parse(localStorage.getItem("usuario"));
-
     if (!usuario || !usuario.roles.includes("administrador")) {
       alert("Debes iniciar sesión como Administrador.");
       window.location.href = "/login";
       return;
     }
-
     obtenerUsuarios();
   }, []);
-
 
   const obtenerUsuarios = async () => {
     try {
       const respuesta = await axios.get("http://localhost:4100/api/users/lista");
       setUsuarios(respuesta.data.usuarios);
-
     } catch (error) {
       alert("No tienes permisos o la sesión expiró.");
       window.location.href = "/login";
     }
   };
 
-
   const asignarRol = async (usuario_id) => {
+    const rolSeleccionado = rolesSeleccionados[usuario_id];
+
     if (!rolSeleccionado) {
       alert("Selecciona un rol antes de asignarlo.");
       return;
@@ -49,9 +41,9 @@ function PanelAdmin() {
       });
 
       alert(respuesta.data.mensaje);
-
+      obtenerUsuarios();
     } catch (error) {
-      alert("Error al asignar el rol.");
+      alert(error.response?.data?.mensaje || "Error al asignar el rol.");
     }
   };
 
@@ -82,10 +74,15 @@ function PanelAdmin() {
 
               <td>
                 <select
-                  onChange={(e) => setRolSeleccionado(e.target.value)}
-                  defaultValue=""
+                  value={rolesSeleccionados[usuario.id] || ""}
+                  onChange={(e) =>
+                    setRolesSeleccionados({
+                      ...rolesSeleccionados,
+                      [usuario.id]: e.target.value,
+                    })
+                  }
                 >
-                  <option value="" disabled>Seleccione rol</option>
+                  <option value="">Seleccione rol</option>
                   <option value="1">Visitante</option>
                   <option value="2">Estudiante</option>
                   <option value="3">Instructor</option>
@@ -99,7 +96,6 @@ function PanelAdmin() {
                   Asignar Rol
                 </button>
               </td>
-
             </tr>
           ))}
         </tbody>
