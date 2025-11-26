@@ -8,6 +8,8 @@ import PanelAdmin from "./pages/PanelAdmin.jsx";
 import PanelInstructor from "./pages/PanelInstructor.jsx";
 import PanelEstudiante from "./pages/PanelEstudiante.jsx";
 import Cursos from "./pages/Cursos.jsx";  
+import Visitor from "./pages/Visitor.jsx";
+
 
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
         {/* Rutas públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/" element={<Visitor />} />
 
         {/* Rutas para cada tipo de usuario */}
         <Route path="/admin" element={<PanelAdmin />} />

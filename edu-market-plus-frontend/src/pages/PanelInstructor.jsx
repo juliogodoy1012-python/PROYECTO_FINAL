@@ -81,20 +81,41 @@ function PanelInstructor() {
     }
   };
 
+return (
+  <div className="dash-container">
 
-  return (
-    <div style={{ padding: "20px" }}>
+    {/* HEADER SUPERIOR */}
+    <header className="dash-header">
       <h1>Panel del Instructor</h1>
-      <p>Aquí puedes crear nuevos cursos y ver los cursos que has creado.</p>
 
-      {/* FORMULARIO */}
+      <div className="dash-actions">
+        <button className="dash-btn" onClick={() => window.scrollTo(0, 0)}>
+          Crear Curso
+        </button>
+        <button className="dash-btn" onClick={() => window.scrollTo(0, 500)}>
+          Mis Cursos
+        </button>
+        <button
+          className="dash-btn danger"
+          onClick={() => {
+            localStorage.removeItem("usuario");
+            window.location.href = "/";
+          }}
+        >
+          Cerrar Sesión
+        </button>
+      </div>
+    </header>
+
+    {/* TARJETA DEL FORMULARIO */}
+    <div className="dash-card">
       <h2>Crear Curso</h2>
 
-      <form onSubmit={enviarFormulario} style={{ maxWidth: "400px" }}>
-        
+      <form className="dash-form" onSubmit={enviarFormulario}>
+
         <input
           type="text"
-          placeholder="Título"
+          placeholder="Título del curso"
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
           required
@@ -105,7 +126,7 @@ function PanelInstructor() {
           value={descripcion}
           onChange={(e) => setDescripcion(e.target.value)}
           required
-        ></textarea>
+        />
 
         <select
           value={categoria}
@@ -142,57 +163,50 @@ function PanelInstructor() {
           onChange={(e) => setVideo(e.target.value)}
         />
 
-        <button type="submit">Crear Curso</button>
+        <button className="dash-btn full" type="submit">
+          Crear Curso
+        </button>
       </form>
+    </div>
 
-      <hr />
+    {/* LISTADO DE CURSOS */}
+    <h2 className="dash-subtitle">Mis Cursos</h2>
 
-      {/* LISTADO DE CURSOS */}
-      <h2>Mis Cursos</h2>
-
+    <div className="dash-grid">
       {misCursos.length === 0 ? (
         <p>No has creado cursos todavía.</p>
       ) : (
-        <ul>
-          {misCursos.map((curso) => (
-            <li key={curso._id}>
-              <h3>{curso.titulo}</h3>
-              <p>{curso.descripcion}</p>
-              <p><strong>Categoría:</strong> {curso.categoria}</p>
-              <p><strong>Precio:</strong> Q{curso.precio}</p>
-              
-            {/* reproduccion de video y foto de referencia*/}
-              {curso.video && (
-                <div>
-                  <h4>Video de Presentación:</h4>
-                  <iframe
-                    width="560"
-                    height="315"
-                    src={curso.video.replace("watch?v=", "embed/")}
-                    title="YouTube video player"
-                    
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>  
-                </div>
-              )}
+        misCursos.map((curso) => (
+          <div className="dash-card curso-card" key={curso._id}>
+            <h3>{curso.titulo}</h3>
+            <p>{curso.descripcion}</p>
 
-              {curso.imagen && (  
-                <div>
-                  <h4>Imagen del Curso:</h4>
-                  <img src={curso.imagen} alt={curso.titulo} style={{ maxWidth: "200px" }} />
-                </div>
-              )}
-            
-              <hr />
-          
+            <p><strong>Categoría:</strong> {curso.categoria}</p>
+            <p><strong>Precio:</strong> Q{curso.precio}</p>
 
-            </li>
-          ))}
-        </ul>
+            {curso.imagen && (
+              <img
+                src={curso.imagen}
+                alt={curso.titulo}
+                className="curso-img"
+              />
+            )}
+
+            {curso.video && (
+              <iframe
+                className="curso-video"
+                src={curso.video.replace("watch?v=", "embed/")}
+                title="Video del curso"
+                allowFullScreen
+              ></iframe>
+            )}
+          </div>
+        ))
       )}
     </div>
-  );
+
+  </div>
+);
 }
 
 export default PanelInstructor;

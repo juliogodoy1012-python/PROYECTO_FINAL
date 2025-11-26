@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-axios.defaults.withCredentials = true;
+import "./Login.css";
 
+axios.defaults.withCredentials = true;
 
 function Registro() {
   const [nombre, setNombre] = useState("");
@@ -12,63 +13,79 @@ function Registro() {
     e.preventDefault();
 
     try {
-      
-      const respuesta = await axios.post("http://localhost:4100/api/auth/registro", {
-        nombre,
-        correo,
-        password,
-      });
+      const respuesta = await axios.post(
+        "http://localhost:4100/api/auth/registro",
+        { nombre, correo, password }
+      );
 
       alert(respuesta.data.mensaje);
-
-    
-      if (respuesta.status === 201) {
-        window.location.href = "/login";
-      }
+      window.location.href = "/login";
 
     } catch (error) {
-      alert("Ocurrió un error al registrarte. Intenta nuevamente.");
+      alert("Error al registrarte. Verifica los datos.");
     }
   };
 
   return (
-    <div className="contenedor-formulario">
+    <div className="login-container">
 
-      <h2>Crear Cuenta</h2>
+      <div className="login-box">
 
-      {/* Formulario controlado por React */}
-      <form onSubmit={enviarFormulario}>
-        
-        <input 
-          type="text"
-          placeholder="Nombre completo"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          required
-        />
+        {/* IZQUIERDA — MENSAJE */}
+        <div className="registro-left">
+          <h1>Edu-Market-Plus</h1>
+          <p>
+            Estas por iniciar el camino hacia un nuevo aprendizaje. 😎🧠
+            <br/>
+            <br />
+            Únete a nuestra comunidad y comienza a explorar una variedad de cursos diseñados para ti.
+          </p>
+        </div>
 
-        <input 
-          type="email"
-          placeholder="Correo electrónico"
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-          required
-        />
+        {/* DERECHA — FORMULARIO */}
+        <div className="registro-right">
+          <h2>Registro</h2>
 
-        <input 
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <form onSubmit={enviarFormulario}>
 
-        <button type="submit">Registrarme</button>
-      </form>
+            <label>Usuario</label>
+            <input
+              type="text"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              placeholder="Ingresa tu nombre de usuario"
+              required
+            />
 
-      <p>
-        ¿Ya tienes cuenta? <a href="/login">Iniciar sesión</a>
-      </p>
+            <label>Email</label>
+            <input
+              type="email"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              placeholder="Ingresa tu correo electrónico"
+              required
+            />
+
+            <label>Contraseña</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Crea tu contraseña"
+              required
+            />
+
+            <button type="submit" className="btn-login">
+              Registrarme
+            </button>
+          </form>
+
+          <p className="signup-text">
+            Ya tienes cuenta creada? <a href="/login">Iniciar sesión</a>
+          </p>
+        </div>
+
+      </div>
 
     </div>
   );

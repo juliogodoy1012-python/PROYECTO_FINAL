@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./Dashboard.css";
+
 axios.defaults.withCredentials = true;
 
 function PanelAdmin() {
   const [usuarios, setUsuarios] = useState([]);
-  const [rolesSeleccionados, setRolesSeleccionados] = useState({}); // 👈 objeto
+  const [rolesSeleccionados, setRolesSeleccionados] = useState({});
 
   useEffect(() => {
     const usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -26,6 +28,24 @@ function PanelAdmin() {
     }
   };
 
+const cerrarSesion = async () => {
+  try {
+    await axios.post(
+      "http://localhost:4100/api/auth/logout",
+      {},
+      { withCredentials: true }
+    );
+
+    localStorage.removeItem("usuario");
+    alert("Sesión cerrada exitosamente!!!");
+    window.location.href = "/login";
+  } catch (error) {
+    alert("Error al cerrar sesión.");
+    console.log(error);
+  }
+};
+
+
   const asignarRol = async (usuario_id) => {
     const rolSeleccionado = rolesSeleccionados[usuario_id];
 
@@ -35,71 +55,85 @@ function PanelAdmin() {
     }
 
     try {
-      const respuesta = await axios.post("http://localhost:4100/api/users/asignar-rol", {
-        usuario_id,
-        rol_id: rolSeleccionado,
-      });
+      const respuesta = await axios.post(
+        "http://localhost:4100/api/users/asignar-rol",
+        { usuario_id, rol_id: rolSeleccionado }
+      );
 
       alert(respuesta.data.mensaje);
       obtenerUsuarios();
+
     } catch (error) {
       alert(error.response?.data?.mensaje || "Error al asignar el rol.");
     }
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Panel del Administrador</h1>
-      <p>Aquí puedes administrar usuarios y asignar roles.</p>
+    <div className="dashboard-container">
 
-      <h2>Lista de Usuarios</h2>
+      {/* │─── BOTÓN DE CERRAR SESIÓN ───│ */}
+      <div className="logout-container">
+        <button className="btn-logout" onClick={cerrarSesion}>
+          Cerrar Sesión
+        </button>
+      </div>
 
-      <table border="1" cellPadding="10" cellSpacing="0">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Asignar Rol</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
+      <h1 className="dashboard-title">Panel del Administrador</h1>
 
-        <tbody>
-          {usuarios.map((usuario) => (
-            <tr key={usuario.id}>
-              <td>{usuario.id}</td>
-              <td>{usuario.nombre}</td>
-              <td>{usuario.correo}</td>
+      <div className="dashboard-card">
+        <h2 className="section-title">Lista de Usuarios</h2>
 
-              <td>
-                <select
-                  value={rolesSeleccionados[usuario.id] || ""}
-                  onChange={(e) =>
-                    setRolesSeleccionados({
-                      ...rolesSeleccionados,
-                      [usuario.id]: e.target.value,
-                    })
-                  }
-                >
-                  <option value="">Seleccione rol</option>
-                  <option value="1">Visitante</option>
-                  <option value="2">Estudiante</option>
-                  <option value="3">Instructor</option>
-                  <option value="4">Soporte</option>
-                  <option value="5">Administrador</option>
-                </select>
-              </td>
-
-              <td>
-                <button onClick={() => asignarRol(usuario.id)}>
-                  Asignar Rol
-                </button>
-              </td>
+        <table className="dashboard-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Asignar Rol</th>
+              <th>Acción</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {usuarios.map((usuario) => (
+              <tr key={usuario.id}>
+                <td>{usuario.id}</td>
+                <td>{usuario.nombre}</td>
+                <td>{usuario.correo}</td>
+
+                <td>
+                  <select
+                    className="dashboard-select"
+                    value={rolesSeleccionados[usuario.id] || ""}
+                    onChange={(e) =>
+                      setRolesSeleccionados({
+                        ...rolesSeleccionados,
+                        [usuario.id]: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Seleccione rol</option>
+                    <option value="2">Estudiante</option>
+                    <option value="3">Instructor</option>
+                    <option value="4">Soporte</option>
+                    <option value="5">Administrador</option>
+                  </select>
+                </td>
+
+                <td>
+                  <button
+                    className="btn-primary"
+                    onClick={() => asignarRol(usuario.id)}
+                  >
+                    Asignar Rol
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,166 @@
+/* FONDO PRINCIPAL */
+.login-container {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #1a1a1d, #4e0f0f);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}
+
+/* CAJA PRINCIPAL */
+.login-box {
+  width: 850px;
+  height: 450px;
+  background: #2b2b2b;
+  border-radius: 12px;
+  display: flex;
+  overflow: hidden;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* ANIMACIÓN SUAVE */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* LADO IZQUIERDO */
+.login-left {
+  width: 50%;
+  padding: 40px;
+  color: #fff;
+}
+
+.login-left h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #ff7f3f;
+}
+
+.login-left label {
+  font-size: 14px;
+  color: #ff7f3f;
+}
+
+.login-left input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 18px 0;
+  border: none;
+  border-bottom: 2px solid #ff7f3f;
+  background: transparent;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+}
+
+/* BOTÓN */
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #ff7f3f, #d95f1f);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-login:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #ffa366, #ff7f3f);
+}
+
+.signup-text {
+  margin-top: 18px;
+  font-size: 13px;
+}
+
+.signup-text a {
+  color: #ff7f3f;
+  text-decoration: none;
+}
+
+/* LADO DERECHO */
+.login-right {
+  width: 53%;
+  background: linear-gradient(135deg, #ff7f3f, #cc5800);
+  padding: 40px;
+  color: #fff;
+  clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-right h1 {
+  font-size: 34px;
+  font-weight: bold;
+}
+
+.login-right p {
+  margin-top: 15px;
+  font-size: 17.5px;
+  width: 90%;
+  line-height: 1.4;
+}
+
+/* PANEL IZQUIERDO DEL REGISTRO */
+.registro-left {
+  width: 50%;
+  padding: 40px;
+  background: linear-gradient(135deg, #ff7f3f, #cc5800);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  clip-path: polygon(0 0, 100% 0, 75% 100%, 0% 100%);
+}
+
+.registro-left h1 {
+  font-size: 42px;
+  margin-bottom: 15px;
+}
+
+.registro-left p {
+  font-size: 17px;
+  width: 80%;
+  line-height: 1.4;
+}
+
+/* PANEL DERECHO DEL REGISTRO */
+.registro-right {
+  width: 50%;
+  padding: 40px;
+  background: #2b2b2b;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.registro-right h2 {
+  font-size: 28px;
+  color: #ff7f3f;
+  margin-bottom: 20px;
+}
+
+/* Inputs con estilo */
+.registro-right label {
+  color: #ff7f3f;
+  font-size: 14px;
+}
+
+.registro-right input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 18px;
+  border: none;
+  border-bottom: 2px solid #ff7f3f;
+  background: transparent;
+  color: #fff;
+}
