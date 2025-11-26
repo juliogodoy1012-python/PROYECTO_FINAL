@@ -39,6 +39,7 @@ app.use(session({
 // Archivos estáticos 
 app.use(express.static("src/public"));
 
+
 // Rutas API
 app.use("/api/auth", authRoutes);
 app.use("/api/users", usuarioRoutes);

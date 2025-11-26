@@ -12,7 +12,7 @@ const router = Router();
 // val antes de registrar
 router.post("/registro", validarRegistro, registrarUsuario);
 router.post("/login", iniciarSesion);
-
+router.post("/logout", cerrarSesion);
 router.get("/logout", cerrarSesion);
 
 export default router;
