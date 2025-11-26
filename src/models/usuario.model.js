@@ -55,3 +55,15 @@ export const obtenerRolesDeUsuario = async (usuario_id) => {
     const [filas] = await pool.query(sql, [usuario_id]);
     return filas;
 };
+
+// ==========================================
+//  VERIFICAR SI UN USUARIO YA TIENE UN ROL
+// ==========================================
+export const usuarioYaTieneRol = async (usuario_id, rol_id) => {
+    const sql = `
+        SELECT id FROM user_roles 
+        WHERE user_id = ? AND role_id = ?
+    `;
+    const [rows] = await pool.query(sql, [usuario_id, rol_id]);
+    return rows.length > 0; // true si ya lo tiene
+};

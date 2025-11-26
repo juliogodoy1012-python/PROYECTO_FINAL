@@ -1,11 +1,15 @@
 import {
     obtenerUsuarioPorId,
     obtenerRolesDeUsuario,
-    asignarRolAUsuario
+    asignarRolAUsuario,
+    usuarioYaTieneRol
 } from "../models/usuario.model.js";
 
 import pool from "../config/db_mysql.js";
 
+// ==========================================
+// LISTAR USUARIOS
+// ==========================================
 export const listarUsuarios = async (req, res) => {
     try {
         const sql = `
@@ -26,7 +30,6 @@ export const listarUsuarios = async (req, res) => {
         });
     }
 };
-
 
 export const obtenerUnUsuario = async (req, res) => {
     try {
@@ -55,20 +58,31 @@ export const obtenerUnUsuario = async (req, res) => {
     }
 };
 
-
+// ==========================================
+// ASIGNAR ROL — VERSIÓN CORRECTA
+// ==============
 export const asignarRol = async (req, res) => {
     try {
         const { usuario_id, rol_id } = req.body;
 
         if (!usuario_id || !rol_id) {
             return res.status(400).json({
-                mensaje: "usuario_id y rol_id son obligatorios."
+                mensaje: "Debes seleccionar un rol antes de asignar."
             });
         }
 
+        // Verificar si ya existe el rol
+        const existe = await usuarioYaTieneRol(usuario_id, rol_id);
+        if (existe) {
+            return res.status(400).json({
+                mensaje: "Este usuario ya tiene asignado ese rol."
+            });
+        }
+
+        // Asigna rol
         await asignarRolAUsuario(usuario_id, rol_id);
 
-        return res.status(200).json({
+        return res.status(201).json({
             mensaje: "Rol asignado correctamente."
         });
 
@@ -80,11 +94,14 @@ export const asignarRol = async (req, res) => {
     }
 };
 
+// ==========================================
+// LISTAR ROLES
+// ==========================================
 export const listarRoles = async (req, res) => {
-  try {
-    const [roles] = await mysql.query("SELECT * FROM roles");
-    res.json(roles);
-  } catch (error) {
-    res.status(500).json({ mensaje: "Error al obtener roles" });
-  }
+    try {
+        const [roles] = await pool.query("SELECT * FROM roles");
+        res.json(roles);
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al obtener roles" });
+    }
 };
