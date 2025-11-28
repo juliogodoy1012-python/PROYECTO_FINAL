@@ -8,6 +8,8 @@ connectMongo();
 import authRoutes from "./routes/auth.routes.js";
 import usuarioRoutes from "./routes/usuario.routes.js";
 import courseRoutes from "./routes/course.routes.js";
+import pagoRoutes from "./routes/pago.routes.js";
+import compraRoutes from "./routes/compra.routes.js";
 
 dotenv.config();
 
@@ -44,7 +46,10 @@ app.use(express.static("src/public"));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", usuarioRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/pago", pagoRoutes);
+app.use("/api/compras", compraRoutes);
 
+// Iniciar servidor
 app.listen(process.env.PORT, () =>
     console.log(`Servidor escuchando en http://localhost:${process.env.PORT}`)
 );
