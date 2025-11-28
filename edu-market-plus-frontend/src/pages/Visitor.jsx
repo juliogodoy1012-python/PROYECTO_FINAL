@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Visitor.css";
+import Navbar from "../components/Navbar.jsx";  
 
 function Visitor() {
   const [cursos, setCursos] = useState([]);
@@ -25,15 +26,7 @@ function Visitor() {
   return (
     <div className="visitor-container">
 
-      {/* NAVBAR */}
-      <nav className="visitor-navbar">
-        <h1 className="logo">EduMarketPlus</h1>
-
-        <div className="nav-buttons">
-          <button onClick={() => window.location.href="/login"} className="btn-login">Login</button>
-          <button onClick={() => window.location.href="/registro"} className="btn-register">Registrarse</button>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* TITULO */}
       <h2 className="visitor-title">Catálogo de Cursos</h2>
@@ -54,7 +47,7 @@ function Visitor() {
               <div className="course-info">
                 <h3>{curso.titulo}</h3>
                 <p className="category">{curso.categoria}</p>
-                <p className="price">Q{curso.precio}</p>
+                <p className="price">${curso.precio}</p>
 
                 <button
                   className="btn-detail"

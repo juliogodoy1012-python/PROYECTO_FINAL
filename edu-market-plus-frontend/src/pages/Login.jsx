@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Login.css";  //diseño css
+
 axios.defaults.withCredentials = true;
 
 function Login() {
@@ -39,6 +40,7 @@ function Login() {
   };
 
   return (
+    
     <div className="login-container">
 
       <div className="login-box">
@@ -73,6 +75,8 @@ function Login() {
             ¿No tienes cuenta? <a href="/registro">Regístrate</a>
           </p>
         </div>
+
+        
 
         {/* DERECHA */}
         <div className="login-right">

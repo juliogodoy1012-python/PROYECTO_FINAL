@@ -99,6 +99,7 @@ return (
           className="dash-btn danger"
           onClick={() => {
             localStorage.removeItem("usuario");
+            alert("Sesión cerrada exitosamente!!!");
             window.location.href = "/";
           }}
         >
