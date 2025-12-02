@@ -72,7 +72,7 @@ function Carrito() {
   //Total
   const total = cursoData.reduce((acc, curso) => acc + curso.precio, 0);
 
-  // 💳 Procesar Pago - con login obligatorio
+  // Procesar Pago - con login obligatorio
   const pagar = async () => {
     const cursosParaStripe = cursoData.map(curso => ({
       titulo: curso.titulo,
