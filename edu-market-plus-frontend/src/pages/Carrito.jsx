@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 
 function Carrito() {
-  const [cursos, setCursos] = useState([]);
-  const [cursoData, setCursoData] = useState([]);
+  const [cursos, setCursos] = useState([]);         
+  // cursos almacena únicamente los IDs guardados en el carrito
 
-  // Verificar Sesión al entrar al carrito
+  const [cursoData, setCursoData] = useState([]);   
+  // cursoData almacena la información completa de cada curso (titulo, precio, etc.)
+
+  // Verificar sesión al entrar al carrito
+  // Esto evita que un usuario no autenticado pueda pagar
   useEffect(() => {
     const verificarSesion = async () => {
       const respuesta = await fetch("http://localhost:4100/api/auth/perfil", {
@@ -21,13 +25,14 @@ function Carrito() {
     verificarSesion();
   }, []);
 
-  // Cargar carrito e insertar curso por URL
+  // Cargar carrito desde localStorage e insertar curso si viene desde la URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const cursoId = params.get("curso");
+    const cursoId = params.get("curso");  // Obtengo el curso enviado desde el botón comprar
 
     let carritoPrevio = JSON.parse(localStorage.getItem("carrito")) || [];
 
+    // Si el curso viene en la URL y no está en el carrito, lo agrego
     if (cursoId && !carritoPrevio.includes(cursoId)) {
       carritoPrevio.push(cursoId);
       localStorage.setItem("carrito", JSON.stringify(carritoPrevio));
@@ -37,7 +42,7 @@ function Carrito() {
     setCursos(carritoPrevio);
   }, []);
 
-  //  Cargar información de cursos
+  // Obtener la información completa de cada curso almacenado en el carrito
   useEffect(() => {
     async function fetchCursos() {
       const data = await Promise.all(
@@ -50,10 +55,11 @@ function Carrito() {
       setCursoData(data);
     }
 
+    // Solo cargar los cursos cuando existan IDs
     if (cursos.length > 0) fetchCursos();
   }, [cursos]);
 
-  // Eliminar curso
+  // Eliminar un curso del carrito
   const eliminarCurso = (id) => {
     const nuevoCarrito = cursos.filter(cid => cid !== id);
     localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
@@ -61,7 +67,7 @@ function Carrito() {
     window.dispatchEvent(new Event("carritoActualizado"));
   };
 
-  // Vaciar carrito
+  // Vaciar completamente el carrito
   const vaciarCarrito = () => {
     localStorage.removeItem("carrito");
     setCursos([]);
@@ -69,11 +75,12 @@ function Carrito() {
     window.dispatchEvent(new Event("carritoActualizado"));
   };
 
-  //Total
+  // Calcular el total sumando los precios de todos los cursos cargados
   const total = cursoData.reduce((acc, curso) => acc + curso.precio, 0);
 
-  // Procesar Pago - con login obligatorio
+  // Enviar los datos del carrito al backend para crear la sesión de Stripe
   const pagar = async () => {
+    // Creo un arreglo con el formato que Stripe necesita
     const cursosParaStripe = cursoData.map(curso => ({
       titulo: curso.titulo,
       precio: curso.precio
@@ -86,12 +93,14 @@ function Carrito() {
       body: JSON.stringify({ cursos: cursosParaStripe })
     });
 
+    // Si el backend responde 401, significa que el usuario no está logueado
     if (resp.status === 401) {
       alert("Debes iniciar sesión antes de pagar.");
       window.location.href = "/login";
       return;
     }
 
+    // Si todo sale bien, recibo el sessionId para redirigir al checkout de Stripe
     const json = await resp.json();
     const stripe = window.Stripe("pk_test_51SGAlFJmPTANdcpkZWGTuEIBDOzhm3ZFjaWA7ctinhhI7wU8jgY8kdn87E4fj9ee5kzJA4ZOxS7hih1f6DepnmCX00jLUGRtUh");
 
@@ -103,7 +112,7 @@ function Carrito() {
       <h1>Carrito de Compra</h1>
 
       {cursoData.length === 0 ? (
-        <p>Tu carrito está vacío 🛒</p>
+        <p>Tu carrito está vacío</p>
       ) : (
         <>
           <ul style={{ listStyle: "none", padding: 0 }}>
@@ -156,7 +165,7 @@ function Carrito() {
               cursor: "pointer"
             }}
           >
-            Proceder a Pago 💳
+            Proceder a Pago
           </button>
         </>
       )}
