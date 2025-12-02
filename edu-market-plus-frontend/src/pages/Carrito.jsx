@@ -21,7 +21,7 @@ function Carrito() {
     verificarSesion();
   }, []);
 
-  // 🛒 Cargar carrito e insertar curso por URL
+  // Cargar carrito e insertar curso por URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const cursoId = params.get("curso");
@@ -53,7 +53,7 @@ function Carrito() {
     if (cursos.length > 0) fetchCursos();
   }, [cursos]);
 
-  // ❌ Eliminar curso
+  // Eliminar curso
   const eliminarCurso = (id) => {
     const nuevoCarrito = cursos.filter(cid => cid !== id);
     localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
@@ -61,7 +61,7 @@ function Carrito() {
     window.dispatchEvent(new Event("carritoActualizado"));
   };
 
-  // 🧹 Vaciar carrito
+  // Vaciar carrito
   const vaciarCarrito = () => {
     localStorage.removeItem("carrito");
     setCursos([]);
