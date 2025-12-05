@@ -1,35 +1,48 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 function Success() {
-
   useEffect(() => {
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const registrarCompra = async () => {
+      const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    if (carrito.length > 0) {
-      fetch("http://localhost:4100/api/pago/registrar", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cursos: carrito })
-      });
+      if (carrito.length === 0) {
+        return;
+      }
 
-      localStorage.removeItem("carrito");
-    }
+      try {
+        const resp = await fetch("http://localhost:4100/api/courses/registrar-compra", {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cursos: carrito }),
+        });
 
+        if (!resp.ok) {
+          console.error("Error al registrar compra");
+        }
+      } catch (e) {
+        console.error("Error en registrarCompra:", e);
+      } finally {
+        // Limpio carrito local
+        localStorage.removeItem("carrito");
+      }
+    };
+
+    registrarCompra();
   }, []);
 
-  return (
-    <div style={{
-      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      backgroundColor: "#f4f8f9",
-      margin: 0,
-      padding: 0,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh"
-    }}>
+  const irAMisCursos = () => {
+    window.location.href = "/panel-estudiante";
+  };
 
+  return (
+    <div style={{ 
+      minHeight: "100vh",
+      display: "flex", 
+      alignItems: "center", 
+      justifyContent: "center",
+      backgroundColor: "#f4f8f9"
+    }}>
       <div style={{
         backgroundColor: "#ffffff",
         padding: "40px",
@@ -39,32 +52,25 @@ function Success() {
         maxWidth: "400px",
         width: "90%"
       }}>
-
-        <div style={{ fontSize: "60px", color: "#28a745" }}>✔️</div>
-
-        <h1 style={{ color: "#333", marginTop: "10px" }}>
-          ¡Pago exitoso!
-        </h1>
-
-        <p style={{ color: "#666", margin: "20px 0" }}>
-          Gracias por tu compra. Hemos recibido tu pago correctamente.
-        </p>
-
-        <a href="/" style={{
-          display: "inline-block",
-          padding: "12px 25px",
-          backgroundColor: "#050f07",
-          color: "#fff",
-          textDecoration: "none",
-          borderRadius: "5px",
-          fontWeight: "bold",
-          transition: "background 0.3s"
-        }}>
-          Volver al inicio
-        </a>
-
+        <div style={{ fontSize: "60px", color: "#28a745" }}>✔</div>
+        <h1>Pago exitoso</h1>
+        <p>Tu compra se ha procesado correctamente y los cursos han sido asignados a tu cuenta.</p>
+        <button
+          onClick={irAMisCursos}
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            borderRadius: "5px",
+            border: "none",
+            backgroundColor: "#050f07",
+            color: "#fff",
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+        >
+          Ir a Mis Cursos
+        </button>
       </div>
-
     </div>
   );
 }
