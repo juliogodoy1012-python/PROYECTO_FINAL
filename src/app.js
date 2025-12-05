@@ -4,7 +4,7 @@ import session from "express-session";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectMongo } from "./config/db_mongo.js"; 
-connectMongo();  
+
 import authRoutes from "./routes/auth.routes.js";
 import usuarioRoutes from "./routes/usuario.routes.js";
 import courseRoutes from "./routes/course.routes.js";
@@ -16,7 +16,7 @@ dotenv.config();
 const app = express();
 
 // Middlewares básicos
-app.use(express.json());
+app.use(express.json)
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
