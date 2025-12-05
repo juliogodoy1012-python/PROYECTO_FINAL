@@ -107,3 +107,109 @@
   font-size: 12px;
   font-weight: bold;
 }
+/* NAV PRINCIPAL */
+.nav {
+  width: 100%;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 0 0 20px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffa94d;
+  text-decoration: none;
+}
+
+/* MENÚ DERECHA */
+.menuDerecha {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.link {
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.carrito {
+  position: relative;
+  color: white;
+}
+
+.badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: orange;
+  padding: 3px 7px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+}
+
+/* BOTONES */
+.btnLogin,
+.btnRegistro,
+.btnLogout {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btnLogin {
+  background: #ff8c32;
+}
+
+.btnRegistro {
+  background: #7f00ff;
+}
+
+.btnLogout {
+  background: #ff3333;
+}
+
+/* HAMBURGUESA */
+.hamburger {
+  display: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .menuDerecha {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    right: 20px;
+    top: 70px;
+    background: rgba(0, 0, 0, 0.95);
+    padding: 20px;
+    border-radius: 10px;
+    gap: 15px;
+  }
+
+  .menuDerecha.open {
+    display: flex;
+  }
+}

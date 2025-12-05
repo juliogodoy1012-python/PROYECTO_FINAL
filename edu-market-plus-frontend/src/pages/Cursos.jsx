@@ -1,67 +1,86 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Dashboard.css";
-axios.defaults.withCredentials = true; 
-// Configuro axios para que siempre envíe cookies (sirve cuando el usuario ya está logueado)
+import Navbar from "../components/Navbar";
+
+
+axios.defaults.withCredentials = true;
 
 function Cursos() {
   const [cursos, setCursos] = useState([]);
-  // Aquí guardo la lista completa de cursos que vienen del backend
+  const [promedios, setPromedios] = useState({});  //  NUEVO
 
-  // Cuando el componente carga, ejecuto la función obtenerCursos
   useEffect(() => {
     obtenerCursos();
   }, []);
 
-  // Función que llama al backend y obtiene todos los cursos disponibles
   const obtenerCursos = async () => {
     try {
       const respuesta = await axios.get("http://localhost:4100/api/courses");
-      setCursos(respuesta.data.cursos); // Guardo los cursos en el estado
+      const lista = respuesta.data.cursos;
+      setCursos(lista);
+
+      //  Obtener rating de cada curso
+      lista.forEach((curso) => obtenerPromedioCurso(curso._id));
+
     } catch (error) {
       alert("No se pudieron cargar los cursos.");
     }
   };
 
-  return (
-    <div className="dash-container">
+  //  NUEVO — obtiene el promedio por curso
+  const obtenerPromedioCurso = async (cursoId) => {
+    try {
+      const res = await fetch(`http://localhost:4100/api/rating/promedio/${cursoId}`);
+      const data = await res.json();
 
-      {/* Encabezado del catálogo */}
+      setPromedios((prev) => ({
+        ...prev,
+        [cursoId]: data.promedio || 0,
+      }));
+
+    } catch (error) {
+      console.error("Error obteniendo promedio:", error);
+    }
+  };
+
+  //  NUEVO — función para pintar estrellas
+  const renderEstrellas = (valor) => {
+    const rating = Math.round(valor);
+
+    return (
+      <span style={{ color: "#f5b301", fontSize: "18px" }}>
+        {"★".repeat(rating)}
+        <span style={{ color: "#ccc" }}>
+          {"★".repeat(5 - rating)}
+        </span>
+      </span>
+    );
+  };
+
+  return ( 
+    
+    <div className="dash-container">
+<Navbar />
+
       <header className="dash-header">
+        <br />
+        <br /><br />
         <h1>Catálogo de Cursos</h1>
 
         <div className="dash-actions">
-          {/* Botón para ir al login */}
-          <button
-            className="dash-btn"
-            onClick={() => (window.location.href = "/login")}
-          >
-            Iniciar Sesión
-          </button>
-
-          {/* Botón para ir al registro */}
-          <button
-            className="dash-btn"
-            onClick={() => (window.location.href = "/registro")}
-          >
-            Registrarse
-          </button>
+          
         </div>
       </header>
 
       <h2 className="dash-subtitle">Explora nuestros cursos</h2>
 
-      {/* Contenedor de tarjetas de cursos */}
       <div className="dash-grid">
         {cursos.length === 0 ? (
-          // Si no hay cursos, muestro mensaje
           <p>No hay cursos disponibles por ahora.</p>
         ) : (
-          // Si hay cursos, los recorro y muestro cada uno
           cursos.map((curso) => (
             <div className="dash-card curso-card" key={curso._id}>
-              
-              {/* Imagen del curso si existe */}
               {curso.imagen && (
                 <img
                   src={curso.imagen}
@@ -70,16 +89,21 @@ function Cursos() {
                 />
               )}
 
-              {/* Información del curso */}
               <h3>{curso.titulo}</h3>
 
-              {/* Muestro solo una parte de la descripción para que no quede demasiado largo */}
+              {/* ⭐ NUEVO — estrellas de calificación */}
+              <div style={{ margin: "5px 0" }}>
+                {renderEstrellas(promedios[curso._id] || 0)}
+                <small style={{ marginLeft: "5px", color: "#666" }}>
+                  ({(promedios[curso._id] || 0).toFixed(1)})
+                </small>
+              </div>
+
               <p>{curso.descripcion.substring(0, 120)}...</p>
 
               <p><strong>Precio:</strong> Q{curso.precio}</p>
               <p><strong>Categoría:</strong> {curso.categoria}</p>
 
-              {/* Botón para ver el detalle del curso */}
               <button
                 className="dash-btn full"
                 onClick={() => (window.location.href = `/curso/${curso._id}`)}
@@ -91,17 +115,14 @@ function Cursos() {
         )}
       </div>
 
-      {/* Sección informativa al final del catálogo */}
       <div className="dash-card" style={{ marginTop: "40px", textAlign: "center" }}>
-        <h2>¿Quieres acceder a los cursos completos?</h2>
-        <p>Regístrate para comprar cursos y acceder a todo el contenido.</p>
-
+        <h3>¿Eres instructor?</h3>
+        <p>Accede a tu panel para crear y gestionar tus cursos.</p>
         <button
-          className="dash-btn"
-          onClick={() => (window.location.href = "/registro")}
-          style={{ marginTop: "10px" }}
+          className="dash-btn full"
+          onClick={() => (window.location.href = "/instructor")}
         >
-          Crear Cuenta Gratis
+          Ir al Panel de Instructor
         </button>
       </div>
 

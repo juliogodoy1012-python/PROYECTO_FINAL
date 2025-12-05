@@ -49,9 +49,11 @@ function Visitor() {
                 <p className="category">{curso.categoria}</p>
                 <p className="price">${curso.precio}</p>
 
-                <button
+        
+            <button
                   className="btn-detail"
                   onClick={() => irALogin()}
+
                 >
                   Ver Detalle
                 </button>

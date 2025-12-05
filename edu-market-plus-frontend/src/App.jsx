@@ -12,6 +12,7 @@ import Visitor from "./pages/Visitor.jsx";
 import CursoDetalle from "./pages/CursoDetalle.jsx";
 import Carrito from "./pages/Carrito.jsx";
 import Success from "./pages/Success.jsx";
+import ChatSoporte from "./pages/ChatSoporte.jsx";
 
 
 function App() {
@@ -25,6 +26,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/" element={<Visitor />} />
+        <Route path="/chat" element={<ChatSoporte />} />
+
         
 
 
@@ -32,6 +35,8 @@ function App() {
         <Route path="/admin" element={<PanelAdmin />} />
         <Route path="/instructor" element={<PanelInstructor />} />
         <Route path="/estudiante" element={<PanelEstudiante />} />
+        <Route path="/panel-estudiante" element={<PanelEstudiante />} />
+
 
         {/* Cursos visibles */}
         <Route path="/cursos" element={<Cursos />} />

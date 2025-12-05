@@ -5,54 +5,100 @@ import { useEffect, useState } from "react";
 function Navbar() {
   const [carritoCount, setCarritoCount] = useState(0);
 
-  // Actualizar contador cuando se modifica el carrito
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const roles = usuario?.roles || [];
+
+  const esAdmin = roles.includes("administrador");
+
   useEffect(() => {
-    const actualizarContador = () => {
+    const actualizarCarrito = () => {
       const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
       setCarritoCount(carrito.length);
     };
 
-    actualizarContador();
-
-    window.addEventListener("carritoActualizado", actualizarContador);
-    return () => window.removeEventListener("carritoActualizado", actualizarContador);
+    actualizarCarrito();
+    window.addEventListener("carritoActualizado", actualizarCarrito);
+    return () =>
+      window.removeEventListener("carritoActualizado", actualizarCarrito);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("usuario");
+    window.location.href = "/";
+  };
 
   return (
     <nav style={styles.nav}>
-      {/* LOGO */}
+      {/* LOGO / INICIO */}
       <Link to="/" style={styles.logo}>
         EduMarketPlus
       </Link>
 
       {/* MENÚ DERECHO */}
       <div style={styles.menuDerecha}>
+        {/* Inicio siempre va en el logo */}
+
+        {/* VER CURSOS (todos) */}
         <Link to="/cursos" style={styles.link}>
           Cursos
         </Link>
 
-        {/* ÍCONO DEL CARRITO */}
-        <Link to="/carrito" style={styles.carrito}>
-          <FaShoppingCart size={22} />
-          {carritoCount > 0 && (
-            <span style={styles.badge}>{carritoCount}</span>
-          )}
+        {/* MIS CURSOS: solo logueados que NO sean admin */}
+        {usuario && !esAdmin && (
+          <Link to="/panel-estudiante" style={styles.link}>
+            Mis Cursos
+          </Link>
+        )}
+
+        {/* CARRITO:
+            - Oculto si NO está logueado
+            - Oculto para admin
+        */}
+        {usuario && !esAdmin && (
+          <Link to="/carrito" style={styles.carrito}>
+            <FaShoppingCart size={22} />
+            {carritoCount > 0 && (
+              <span style={styles.badge}>{carritoCount}</span>
+            )}
+          </Link>
+        )}
+
+        {/* SOPORTE (todos lo ven) */}
+        <Link to="/chat" style={styles.link}>
+          Soporte
         </Link>
 
-        {/* BOTONES */}
-        <Link to="/login" style={styles.btnLogin}>
-          Login
-        </Link>
+        {/* PANEL ADMIN: solo admin */}
+        {usuario && esAdmin && (
+          <Link to="/admin" style={styles.link}>
+            Panel Admin
+          </Link>
+        )}
 
-        <Link to="/registro" style={styles.btnRegistro}>
-          Registrarse
-        </Link>
+        {/* NO LOGUEADO: Login + Registro, SIN carrito */}
+        {!usuario && (
+          <>
+            <Link to="/login" style={styles.btnLogin}>
+              Login
+            </Link>
+            <Link to="/registro" style={styles.btnRegistro}>
+              Registrarse
+            </Link>
+          </>
+        )}
+
+        {/* LOGUEADO: botón Cerrar sesión */}
+        {usuario && (
+          <button onClick={handleLogout} style={styles.btnLogout}>
+            Cerrar Sesión
+          </button>
+        )}
       </div>
     </nav>
   );
 }
 
-// 🎨 ESTILOS
+// ESTILOS (diseño inicial)
 const styles = {
   nav: {
     width: "100%",
@@ -87,6 +133,7 @@ const styles = {
     position: "relative",
     color: "white",
     cursor: "pointer",
+    textDecoration: "none",
   },
   badge: {
     position: "absolute",
@@ -112,6 +159,14 @@ const styles = {
     color: "white",
     borderRadius: "20px",
     textDecoration: "none",
+  },
+  btnLogout: {
+    padding: "8px 16px",
+    background: "red",
+    color: "white",
+    borderRadius: "20px",
+    border: "none",
+    cursor: "pointer",
   },
 };
 

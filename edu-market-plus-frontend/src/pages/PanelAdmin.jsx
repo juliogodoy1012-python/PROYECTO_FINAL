@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Dashboard.css";
+import Navbar from "../components/Navbar";
+
 
 axios.defaults.withCredentials = true;
 // Configuro axios para que siempre envíe cookies en cada petición
@@ -88,12 +90,10 @@ function PanelAdmin() {
 
   return (
     <div className="dashboard-container">
-
+        
       {/* Botón de cerrar sesión del administrador */}
       <div className="logout-container">
-        <button className="btn-logout" onClick={cerrarSesion}>
-          Cerrar Sesión
-        </button>
+        <Navbar />
       </div>
 
       <h1 className="dashboard-title">Panel del Administrador</h1>

@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { crearCheckout, registrarCompra } from "../controllers/pago.controller.js";
 import { requiereAutenticacion } from "../middlewares/auth.middleware.js";
+import { crearCheckout, registrarCompra } from "../controllers/pago.controller.js";
 
 const router = Router();
 
 router.post("/checkout", requiereAutenticacion, crearCheckout);
 
-router.post("/registrar", requiereAutenticacion, registrarCompra);
+// ESTA ES LA RUTA QUE FALTABA
+router.post("/registrar-compra", requiereAutenticacion, registrarCompra);
+
 
 export default router;

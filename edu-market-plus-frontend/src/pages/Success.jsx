@@ -5,12 +5,10 @@ function Success() {
     const registrarCompra = async () => {
       const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-      if (carrito.length === 0) {
-        return;
-      }
+      if (carrito.length === 0) return;
 
       try {
-        const resp = await fetch("http://localhost:4100/api/courses/registrar-compra", {
+        const resp = await fetch("http://localhost:4100/api/pago/registrar-compra", {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -23,7 +21,6 @@ function Success() {
       } catch (e) {
         console.error("Error en registrarCompra:", e);
       } finally {
-        // Limpio carrito local
         localStorage.removeItem("carrito");
       }
     };

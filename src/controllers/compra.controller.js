@@ -1,13 +1,23 @@
-import Compra from "../models/compra.model.js";
-import Curso from "../models/curso.model.js";
+import mongoose from "mongoose";
 
 export const misCursos = async (req, res) => {
-  const user_id = req.session.usuario.id;
+  try {
+    const userId = req.session.usuario.id; // ID del usuario autenticado
 
-  const compras = await Compra.find({ user_id }).populate("curso_id");
+    const comprasCollection = mongoose.connection.collection("compras");
 
-  return res.json({
-    ok: true,
-    cursos: compras.map(c => c.curso_id)
-  });
+    // Buscar todas las compras del usuario
+    const compras = await comprasCollection.find({ user_id: userId }).toArray();
+
+    const cursosIds = compras.map(c => c.curso_id.toString());
+
+    return res.json({
+      ok: true,
+      cursosIds
+    });
+
+  } catch (error) {
+    console.error("Error listando compras:", error);
+    res.status(500).json({ mensaje: "Error obteniendo cursos" });
+  }
 };

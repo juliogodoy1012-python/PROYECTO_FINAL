@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Navbar from "../components/Navbar";
+
 
 axios.defaults.withCredentials = true;
 // Configuro axios para que incluya cookies en todas las peticiones
@@ -88,33 +90,21 @@ function PanelInstructor() {
 
   return (
     <div className="dash-container">
-
+        <Navbar />
+<br />
       {/* Encabezado superior del panel */}
       <header className="dash-header">
+        <br />
         <h1>Panel del Instructor</h1>
 
         <div className="dash-actions">
-          {/* Botón para hacer scroll hacia el formulario */}
-          <button className="dash-btn" onClick={() => window.scrollTo(0, 0)}>
-            Crear Curso
-          </button>
+        
 
           {/* Botón para ver cursos creados */}
           <button className="dash-btn" onClick={() => window.scrollTo(0, 500)}>
-            Mis Cursos
+            Cursos creados
           </button>
 
-          {/* Cerrar sesión */}
-          <button
-            className="dash-btn danger"
-            onClick={() => {
-              localStorage.removeItem("usuario");
-              alert("Sesión cerrada exitosamente!!!");
-              window.location.href = "/";
-            }}
-          >
-            Cerrar Sesión
-          </button>
         </div>
       </header>
 
