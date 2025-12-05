@@ -4,10 +4,8 @@ import express from "express";
 import session from "express-session";
 import cors from "cors";
 import dotenv from "dotenv";
-<<<<<<< HEAD
 import { connectMongo } from "./config/db_mongo.js";
 import ratingRoutes from "./routes/rating.routes.js";
-=======
 import { connectMongo } from "./config/db_mongo.js"; 
 
 import authRoutes from "./routes/auth.routes.js";
@@ -15,14 +13,12 @@ import usuarioRoutes from "./routes/usuario.routes.js";
 import courseRoutes from "./routes/course.routes.js";
 import pagoRoutes from "./routes/pago.routes.js";
 import compraRoutes from "./routes/compra.routes.js";
->>>>>>> 32cebef6dd0b025ae4cbfddd03b79a3a5f92080c
 
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 
-<<<<<<< HEAD
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
@@ -35,10 +31,7 @@ await connectMongo();
 
 // Middlewares
 app.use(express.json());
-=======
 // Middlewares básicos
-app.use(express.json)
->>>>>>> 32cebef6dd0b025ae4cbfddd03b79a3a5f92080c
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
@@ -107,7 +100,7 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log(`❌ Usuario desconectado: ${socket.id}`);
+    console.log(` Usuario desconectado: ${socket.id}`);
   });
 });
 
